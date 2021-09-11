@@ -1,0 +1,103 @@
+.contentFranchise{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.vtexModalContent{
+    padding: 40px 30px;
+}
+
+.titleFranschise{
+    margin-bottom: 25px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #333;
+}
+
+.regionItems{
+    width: 100%;
+    width: 310px;
+    border-radius: 20px;
+    height: 35px;
+    margin-bottom: 25px;
+    border: 1px solid #ccc;
+    padding: 0 15px;
+    text-indent: initial;
+    cursor: pointer;
+    outline: none!important;
+    font-size: 12px;
+    color: #333;
+}
+
+.buttonHandle{
+    background: transparent;
+    width: fit-content;
+    align-items: center;
+    outline: none!important;
+    text-align: left;
+    cursor: pointer;
+    font-size: .9rem;
+    color: #444;
+    line-height: 15px;
+    position: relative;
+    top: -3px;
+    justify-content: flex-start;
+    outline: none;
+    word-break: break-word;
+    margin-left: 15px;
+    border-radius: 5px;
+    border: none;
+    transition: all .12s linear;
+}
+
+.buttonHandle::before {
+    content: "";
+    display: block;
+    width: 20px;
+    max-width: 20px;
+    height: 40px;
+    margin-right: 5px;
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg' aria-labelledby='title' aria-describedby='desc' role='img' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3EPin%3C/title%3E%3Cdesc%3EA line styled icon from Orion Icon Library.%3C/desc%3E%3Cpath stroke-width='4' stroke-miterlimit='10' stroke='%23202020' fill='none' d='M32 2a20 20 0 0 0-20 20c0 18 20 39 20 39s20-21 20-39A20 20 0 0 0 32 2z' data-name='layer2' stroke-linejoin='round' stroke-linecap='round'%3E%3C/path%3E%3Ccircle stroke-width='4' stroke-miterlimit='10' stroke='%23202020' fill='none' r='8' cy='22' cx='32' data-name='layer1' stroke-linejoin='round' stroke-linecap='round'%3E%3C/circle%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+
+.buttonHandle::after{
+    content: "";
+    display: block;
+    width: 20px;
+    max-width: 20px;
+    height: 40px;
+    margin-left: 5px;
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' aria-labelledby='title' aria-describedby='desc' role='img' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3EAngle Down%3C/title%3E%3Cdesc%3EA line styled icon from Orion Icon Library.%3C/desc%3E%3Cpath data-name='layer1' fill='none' stroke='%23202020' stroke-miterlimit='10' stroke-width='2' d='M20 26l11.994 14L44 26' stroke-linejoin='round' stroke-linecap='round'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+
+.backButton{
+    border-radius: 5px;
+    background: #52af3a;
+    text-transform: uppercase;
+    color: white;
+    font-weight: 600;
+    font-size: 11px;
+    border: none;
+    height: 35px;
+    padding: 10px 30px;
+    cursor: pointer;
+    transition: all .12s linear;
+}
+
+.backButton:hover{
+    background-color: #45a12d;
+}
+
+.txtCallback{
+    font-size: 13px;
+    color: #000;
+    text-align: center;
+    margin: 0 0 25px;
+}

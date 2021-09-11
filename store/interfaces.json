@@ -1,0 +1,8 @@
+{
+  "store-selector": {
+    "component": "StoreSelector"
+  },
+  "campus-selector": {
+    "component": "campusSelector"
+  }
+}

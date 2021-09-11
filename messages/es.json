@@ -1,0 +1,20 @@
+{
+  "editor.store-locator.title": "Store Locator",
+  "editor.store-locator.description": "Handle the change on selling channel",
+  "editor.store-selector.mainButtonWelcomeText.title": "Main button welcome text",
+  "editor.store-selector.mainButtonWelcomeText.description": "Text to display on the main button when there is no sales channel selected.",
+  "store/store-selector.mainButtonWelcomeText.default": "Select your nearby store",
+  "editor.store-selector.mainButtonSelectedStoreText.title": "Main button selected store message",
+  "editor.store-selector.mainButtonSelectedStoreText.description": "Text to display on the main button when there is a sales channel selected",
+  "store/store-selector.mainButtonSelectedStoreText.default": "You are buying in:",
+  "editor.store-selector.storeModalTitle.title": "Store Modal Title",
+  "editor.store-selector.storeModalTitle.description": "Title to be displayed in the modal",
+  "store/store-selector.storeModalTitle.default": "Select a branch",
+  "store/store-selector.changeStoreButtonText": "(Haz click para cambiar)",
+  "store/store-selector.byPostalCode": "Envío a domicilio",
+  "store/store-selector.byStoreSelection": "Recoger en tienda",
+  "store/store-selector.modalFooterDisclamer": "Los precios y el inventario pueden variar según la región, sucursal o código postal informado",
+  "store/store-selector.noResults": "Sin resultados",
+  "store/store-selector.selectStore": "Sucursales",
+  "store/store-selector.zipCode": "Código Postal"
+}
