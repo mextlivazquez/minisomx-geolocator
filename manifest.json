@@ -1,7 +1,7 @@
 {
   "vendor": "minisomx",
   "name": "geolocator",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "title": "Geolocator",
   "description": "Geolocator component",
   "defaultLocale": "es",

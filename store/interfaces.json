@@ -1,8 +1,5 @@
 {
-  "store-selector": {
-    "component": "StoreSelector"
-  },
-  "campus-selector": {
-    "component": "campusSelector"
+  "geolocator-store": {
+    "component": "geolocatorStore"
   }
 }
