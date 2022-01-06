@@ -43,6 +43,7 @@ export interface GeolocationPositionError {
 function handleStoreUserZipCode(userZipCode: string) {
   if (userZipCode) {
     localStorage.zipcode = userZipCode
+    delete localStorage.deliveryPopup
   }
   return true
 }
@@ -52,6 +53,10 @@ const StoreSelector: StorefrontFunctionComponent<StoreSelectorProps> = ({
 }) => {
   const [txtEnvio /*handleTxtEnvio*/] = useState('')
   const [isModalOpen, handleOpenModal] = useState(false)
+  const [isOpenImg, hadleOpenImg] = useState({
+    active: false,
+    image: '',
+  })
   const [txtResponse /*handleTxtResponse*/] = useState('')
   const [txtSubmit, handleTxtSubmit] = useState('Buscar')
   const handles = useCssHandles(CSS_HANDLES)
@@ -69,6 +74,19 @@ const StoreSelector: StorefrontFunctionComponent<StoreSelectorProps> = ({
 
     // cierro modal
     handleOpenModal(false)
+    window.location.reload()
+  }
+
+  function handleCloseImage(event: Event) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    // cierro modal
+    hadleOpenImg({
+      active: false,
+      image: '',
+    })
+    window.location.reload()
   }
 
   async function handleSetZipCode(event: any) {
@@ -83,7 +101,21 @@ const StoreSelector: StorefrontFunctionComponent<StoreSelectorProps> = ({
     handleTxtSubmit('Buscando...')
 
     // guardo los datos de la tienda en la sesion de usuario para el carrito
-    await saveUserStoreInfo(zipCode)
+    const storeInfo = await saveUserStoreInfo(zipCode)
+    console.log(storeInfo.storeName)
+
+    imagePopup(storeInfo.storeName)
+    // if (storeInfo.storeName.includes('Express - ')) {
+    //   hadleOpenImg({
+    //     active: true,
+    //     image: 'https://minisomx.vtexassets.com/arquivos/300x300_express.jpg',
+    //   })
+    // } else if (storeInfo.storeName.includes('Mensajería - ')) {
+    //   hadleOpenImg({
+    //     active: true,
+    //     image: 'https://minisomx.vtexassets.com/arquivos/300x300_normal.jpg',
+    //   })
+    // }
 
     // actulizo el nombre de la tienda en el header
     setSelectedStoreName(localStorage.storename)
@@ -91,8 +123,26 @@ const StoreSelector: StorefrontFunctionComponent<StoreSelectorProps> = ({
 
     // cierro modal
     handleOpenModal(false)
-
     return true
+  }
+
+  function imagePopup(storeName: string) {
+    if (localStorage.deliveryPopup) return
+
+    if (storeName.includes('Express - ')) {
+      // oculto modal expess
+      hadleOpenImg({
+        active: true,
+        image: 'https://minisomx.vtexassets.com/arquivos/300x300_express.jpg',
+      })
+    }
+    // else if (storeName.includes('Mensajería - ')) {
+    //   hadleOpenImg({
+    //     active: true,
+    //     image: 'https://minisomx.vtexassets.com/arquivos/300x300_normal.jpg',
+    //   })
+    // }
+    localStorage.deliveryPopup = true
   }
 
   useEffect(() => {
@@ -137,10 +187,40 @@ const StoreSelector: StorefrontFunctionComponent<StoreSelectorProps> = ({
           console.error(error)
         })
     } else {
+      const myfn = async () => {
+        const storeInfo = await saveUserStoreInfo(localStorage.zipcode)
+        console.log(storeInfo.storeName)
+        imagePopup(storeInfo.storeName)
+
+        // if (storeInfo.storeName.includes('Express - ')) {
+        //   hadleOpenImg({
+        //     active: true,
+        //     image:
+        //       'https://minisomx.vtexassets.com/arquivos/300x300_express.jpg',
+        //   })
+        // } else if (storeInfo.storeName.includes('Mensajería - ')) {
+        //   hadleOpenImg({
+        //     active: true,
+        //     image:
+        //       'https://minisomx.vtexassets.com/arquivos/300x300_normal.jpg',
+        //   })
+        // }
+      }
+      myfn()
       // existe cp, verifico si existe en la sesion de usuario
-      saveUserStoreInfo(localStorage.zipcode)
+
+      // {
+      //   storeInfo.storeName === 'Mensajería - ' && console.log('hola')
+      // }
     }
-  }, [isModalOpen])
+  }, [])
+
+  // useEffect(() => {
+  //   if (!localStorage.zipcode) {
+  //     // obtengo informacion de la posicion del navegador
+  //     console.log(getBestDeliveryStore())
+  //   }
+  // })
 
   return (
     <React.Fragment>
@@ -184,13 +264,30 @@ const StoreSelector: StorefrontFunctionComponent<StoreSelectorProps> = ({
                     maxLength={5}
                     name="zipcode"
                   />
-                  <button className={handles.submitFranchise}>
+
+                  <button
+                    className={handles.submitFranchise}
+                    // onClick={() => hadleOpenImg(true)}
+                  >
                     {txtSubmit}
                   </button>
                 </form>
                 <div className={`${handles.reponseWrapper}`}>{txtResponse}</div>
                 <div className={`${handles.txtEnvio}`}>{txtEnvio}</div>
               </div>
+            </div>
+          </Modal>
+        )}
+        {canUseDOM && (
+          <Modal
+            centered
+            showCloseIcon
+            class="miniso-modal"
+            isOpen={isOpenImg.active}
+            onClose={handleCloseImage}
+          >
+            <div>
+              <img src={isOpenImg.image} alt="" />
             </div>
           </Modal>
         )}

@@ -11,6 +11,13 @@ const defaultHeaders: object = {
   'x-vtex-api-appToken': vtexAppToken,
 }
 
+// informacion de la tienda por default (cedis)
+const defaultBestDeliveryStore: any = {
+  storeId: cedisStoreCode,
+  storeName:
+    'Mensajería - Entrega a Domicilio. La mayoría de nuestros pedidos llegan entre 24 y 72 hrs',
+}
+
 // producto para hacer la simulacion de carrito de google
 function getProductSimulationData(zipCode: string, sku?: string) {
   return {
@@ -41,8 +48,6 @@ async function makeSimulationStore(zipCode: string, sku?: string) {
 
 // obtengo la mejor tienda desde vtex
 async function getBestDeliveryStore(vtexSessionResponse: any) {
-  let bestDeliveryShipping: string = cedisStoreCode
-
   // valido para encontrar el warehouseId de la tienda relacionada al codigo postal
   if (
     vtexSessionResponse &&
@@ -61,12 +66,15 @@ async function getBestDeliveryStore(vtexSessionResponse: any) {
       if (sla.deliveryIds && (sla.deliveryIds || []).length) {
         const deliveryId = sla.deliveryIds[0]
         // obtengo el id del almacen para la tienda
-        bestDeliveryShipping = `minisomx${deliveryId.warehouseId}`.toLowerCase()
+        return {
+          storeId: `minisomx${deliveryId.warehouseId}`.toLowerCase(),
+          storeName: sla.name,
+        }
       }
     }
   }
 
-  return bestDeliveryShipping
+  return defaultBestDeliveryStore
 }
 
 // guardo los valores de la mejor tienda en la sesion del usuario
@@ -104,11 +112,11 @@ async function saveStoreInfo(storeId: string) {
 
 // guardo la información en el la sesion de usuario
 export default async function saveUserStoreInfo(zipCode: string | null) {
-  // guardo el cedis por defecto cuando no existe el codigo postal
-  if (!zipCode || zipCode === '5000') {
+  // guardo el cedis por defecto cuando no existe el codigo postal y lo limito a un codigo postal mayor 99999
+  if (!zipCode || zipCode === '5000' || +zipCode >= 99999) {
     await saveDataStore(cedisStoreCode)
     await saveStoreInfo(cedisStoreCode)
-    return false
+    return defaultBestDeliveryStore
   }
 
   // simulo el carrito agregando por defecto un sku con inventario infinito
@@ -119,16 +127,16 @@ export default async function saveUserStoreInfo(zipCode: string | null) {
 
   // si el id de la tienda es el mismo que el cedis, intento con otro sku y
   // el mismo codigo postal
-  if (bestDeliveryStore === cedisStoreCode) {
+  if (bestDeliveryStore.storeId === cedisStoreCode) {
     const newSimulation = await makeSimulationStore(zipCode, '4214')
     bestDeliveryStore = await getBestDeliveryStore(newSimulation)
   }
 
   // guardo la informacion de la tienda en la sesion de compra (orderform)
-  await saveDataStore(bestDeliveryStore)
+  await saveDataStore(bestDeliveryStore.storeId)
 
   // guardo la informacion de la tienda en el localStorage
-  await saveStoreInfo(bestDeliveryStore)
+  await saveStoreInfo(bestDeliveryStore.storeId)
 
-  return true
+  return bestDeliveryStore
 }
