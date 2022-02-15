@@ -99,6 +99,7 @@ const StoreSelector: StorefrontFunctionComponent<StoreSelectorProps> = ({
     // guardo cp en el (localStorage del navegador
     handleStoreUserZipCode(zipCode)
     handleTxtSubmit('Buscando...')
+    window.location.reload()
 
     // guardo los datos de la tienda en la sesion de usuario para el carrito
     const storeInfo = await saveUserStoreInfo(zipCode)
