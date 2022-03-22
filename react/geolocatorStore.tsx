@@ -6,8 +6,8 @@ import './components/global.css'
 import { canUseDOM } from 'vtex.render-runtime'
 
 // utils
-import getBrowserPosition from './utils/getBrowserPosition'
-import getGoogleZipCode from './utils/getGoogleZipCode'
+// import getBrowserPosition from './utils/getBrowserPosition'
+// import getGoogleZipCode from './utils/getGoogleZipCode'
 import saveUserStoreInfo from './utils/vtexMethods'
 
 const CSS_HANDLES = [
@@ -48,6 +48,8 @@ function handleStoreUserZipCode(userZipCode: string) {
   return true
 }
 
+const isActiveComponent = false
+
 const StoreSelector: StorefrontFunctionComponent<StoreSelectorProps> = ({
   StoreSelector,
 }) => {
@@ -70,7 +72,7 @@ const StoreSelector: StorefrontFunctionComponent<StoreSelectorProps> = ({
     event.stopPropagation()
 
     // guardo por defecto el cedis mandando el cp como nulo
-    saveUserStoreInfo(null)
+    saveUserStoreInfo(/*null*/)
 
     // cierro modal
     handleOpenModal(false)
@@ -102,7 +104,7 @@ const StoreSelector: StorefrontFunctionComponent<StoreSelectorProps> = ({
     window.location.reload()
 
     // guardo los datos de la tienda en la sesion de usuario para el carrito
-    const storeInfo = await saveUserStoreInfo(zipCode)
+    const storeInfo = await saveUserStoreInfo(/*zipCode*/)
     console.log(storeInfo.storeName)
 
     imagePopup(storeInfo.storeName)
@@ -147,74 +149,81 @@ const StoreSelector: StorefrontFunctionComponent<StoreSelectorProps> = ({
   }
 
   useEffect(() => {
-    // leer cp guardado en el navegador
-    if (!localStorage.zipcode) {
-      // obtengo informacion de la posicion del navegador
-      getBrowserPosition()
-        .then((position: Position) => {
-          const latitude: number = position.coords.latitude
-          const longitude: number = position.coords.longitude
-
-          // obtengo codigo postal de google geolocator
-          getGoogleZipCode(latitude, longitude)
-            .then(async (zipCode: any) => {
-              // guardo el codigo postal en la sesion del usuario
-              handleStoreUserZipCode(zipCode)
-
-              // guardo los datos en la sesion de usuario
-              await saveUserStoreInfo(zipCode)
-
-              // actulizo el nombre de la tienda en el header
-              setSelectedStoreName(localStorage.storename)
-            })
-            .catch((error: ErrorEvent) => {
-              saveUserStoreInfo('5000')
-
-              // lanzo modal para pedir CP del cliente al ocurrir un error en la
-              // API de Google o que no se haya encontrado un cp asociado a
-              // la ubicacion (lat, long) del cliente
-              // handleOpenModal(true)
-
-              console.error(error)
-            })
-        })
-        .catch((error: GeolocationPositionError) => {
-          saveUserStoreInfo('5000')
-
-          // lanzo modal para pedir CP del cliente al ocurrir un error o
-          // que el usuario haya denegado compartir la ubicacion
-          // handleOpenModal(true)
-
-          console.error(error)
-        })
-    } else {
-      const myfn = async () => {
-        const storeInfo = await saveUserStoreInfo(localStorage.zipcode)
-        console.log(storeInfo.storeName)
-        imagePopup(storeInfo.storeName)
-
-        // if (storeInfo.storeName.includes('Express - ')) {
-        //   hadleOpenImg({
-        //     active: true,
-        //     image:
-        //       'https://minisomx.vtexassets.com/arquivos/300x300_express.jpg',
-        //   })
-        // } else if (storeInfo.storeName.includes('Mensajería - ')) {
-        //   hadleOpenImg({
-        //     active: true,
-        //     image:
-        //       'https://minisomx.vtexassets.com/arquivos/300x300_normal.jpg',
-        //   })
-        // }
-      }
-      myfn()
-      // existe cp, verifico si existe en la sesion de usuario
-
-      // {
-      //   storeInfo.storeName === 'Mensajería - ' && console.log('hola')
-      // }
+    async function resetStoreSession() {
+      await saveUserStoreInfo()
     }
-  }, [])
+    resetStoreSession()
+  })
+
+  // useEffect(() => {
+  //   // leer cp guardado en el navegador
+  //   if (!localStorage.zipcode) {
+  //     // obtengo informacion de la posicion del navegador
+  //     getBrowserPosition()
+  //       .then((position: Position) => {
+  //         const latitude: number = position.coords.latitude
+  //         const longitude: number = position.coords.longitude
+
+  //         // obtengo codigo postal de google geolocator
+  //         getGoogleZipCode(latitude, longitude)
+  //           .then(async (zipCode: any) => {
+  //             // guardo el codigo postal en la sesion del usuario
+  //             handleStoreUserZipCode(zipCode)
+
+  //             // guardo los datos en la sesion de usuario
+  //             await saveUserStoreInfo(/*zipCode*/)
+
+  //             // actulizo el nombre de la tienda en el header
+  //             setSelectedStoreName(localStorage.storename)
+  //           })
+  //           .catch((error: ErrorEvent) => {
+  //             saveUserStoreInfo(/*'5000'*/)
+
+  //             // lanzo modal para pedir CP del cliente al ocurrir un error en la
+  //             // API de Google o que no se haya encontrado un cp asociado a
+  //             // la ubicacion (lat, long) del cliente
+  //             // handleOpenModal(true)
+
+  //             console.error(error)
+  //           })
+  //       })
+  //       .catch((error: GeolocationPositionError) => {
+  //         saveUserStoreInfo(/*'5000'*/)
+
+  //         // lanzo modal para pedir CP del cliente al ocurrir un error o
+  //         // que el usuario haya denegado compartir la ubicacion
+  //         // handleOpenModal(true)
+
+  //         console.error(error)
+  //       })
+  //   } else {
+  //     const myfn = async () => {
+  //       const storeInfo = await saveUserStoreInfo(/*localStorage.zipcode*/)
+  //       console.log(storeInfo.storeName)
+  //       imagePopup(storeInfo.storeName)
+
+  //       // if (storeInfo.storeName.includes('Express - ')) {
+  //       //   hadleOpenImg({
+  //       //     active: true,
+  //       //     image:
+  //       //       'https://minisomx.vtexassets.com/arquivos/300x300_express.jpg',
+  //       //   })
+  //       // } else if (storeInfo.storeName.includes('Mensajería - ')) {
+  //       //   hadleOpenImg({
+  //       //     active: true,
+  //       //     image:
+  //       //       'https://minisomx.vtexassets.com/arquivos/300x300_normal.jpg',
+  //       //   })
+  //       // }
+  //     }
+  //     myfn()
+  //     // existe cp, verifico si existe en la sesion de usuario
+
+  //     // {
+  //     //   storeInfo.storeName === 'Mensajería - ' && console.log('hola')
+  //     // }
+  //   }
+  // }, [])
 
   // useEffect(() => {
   //   if (!localStorage.zipcode) {
@@ -224,76 +233,81 @@ const StoreSelector: StorefrontFunctionComponent<StoreSelectorProps> = ({
   // })
 
   return (
-    <React.Fragment>
-      <div className={`${handles.wraper} flex items-center`}>
-        <button
-          className={`vtex-button flex ${handles.buttonHandle}`}
-          onClick={() => handleOpenModal(true)}
-        >
-          {selectedStoreName}
-        </button>
-        {canUseDOM && (
-          <Modal
-            centered
-            showCloseIcon
-            class="miniso-modal"
-            isOpen={isModalOpen}
-            onClose={handleCloseModal}
+    (isActiveComponent && (
+      <React.Fragment>
+        <div className={`${handles.wraper} flex items-center`}>
+          <button
+            className={`vtex-button flex ${handles.buttonHandle}`}
+            onClick={() => handleOpenModal(true)}
           >
-            <div className="vtex-modal-content flex flex-center">
-              <div className={`${handles.franchiseContentWrapper} column-sm`}>
-                <span
-                  className={`${handles.titleFranchise} ${handles.spanFranchise}`}
-                >
-                  INGRESA TU CÓDIGO POSTAL
-                </span>
-                <span
-                  className={`${handles.subTitleFranchise} ${handles.spanFranchise}`}
-                >
-                  {'para ofrecerte un mejor servicio '}
-                  <b className={`${handles.highlightSpan}`}>
-                    económica y rápida
-                  </b>
-                  {' de entrega.'}
-                </span>
-                <form onSubmit={handleSetZipCode}>
-                  <input
-                    // onChange={event => setCP(event.target.value)}
-                    className={`${handles.inputCpFranchise} inputcode`}
-                    placeholder="Tu código postal a 5 dígitos"
-                    type="text"
-                    maxLength={5}
-                    name="zipcode"
-                  />
-
-                  <button
-                    className={handles.submitFranchise}
-                    // onClick={() => hadleOpenImg(true)}
+            {selectedStoreName}
+          </button>
+          {canUseDOM && (
+            <Modal
+              centered
+              showCloseIcon
+              class="miniso-modal"
+              isOpen={isModalOpen}
+              onClose={handleCloseModal}
+            >
+              <div className="vtex-modal-content flex flex-center">
+                <div className={`${handles.franchiseContentWrapper} column-sm`}>
+                  <span
+                    className={`${handles.titleFranchise} ${handles.spanFranchise}`}
                   >
-                    {txtSubmit}
-                  </button>
-                </form>
-                <div className={`${handles.reponseWrapper}`}>{txtResponse}</div>
-                <div className={`${handles.txtEnvio}`}>{txtEnvio}</div>
+                    INGRESA TU CÓDIGO POSTAL
+                  </span>
+                  <span
+                    className={`${handles.subTitleFranchise} ${handles.spanFranchise}`}
+                  >
+                    {'para ofrecerte un mejor servicio '}
+                    <b className={`${handles.highlightSpan}`}>
+                      económica y rápida
+                    </b>
+                    {' de entrega.'}
+                  </span>
+                  <form onSubmit={handleSetZipCode}>
+                    <input
+                      // onChange={event => setCP(event.target.value)}
+                      className={`${handles.inputCpFranchise} inputcode`}
+                      placeholder="Tu código postal a 5 dígitos"
+                      type="text"
+                      maxLength={5}
+                      name="zipcode"
+                    />
+
+                    <button
+                      className={handles.submitFranchise}
+                      // onClick={() => hadleOpenImg(true)}
+                    >
+                      {txtSubmit}
+                    </button>
+                  </form>
+                  <div className={`${handles.reponseWrapper}`}>
+                    {txtResponse}
+                  </div>
+                  <div className={`${handles.txtEnvio}`}>{txtEnvio}</div>
+                </div>
               </div>
-            </div>
-          </Modal>
-        )}
-        {canUseDOM && (
-          <Modal
-            centered
-            showCloseIcon
-            class="miniso-modal"
-            isOpen={isOpenImg.active}
-            onClose={handleCloseImage}
-          >
-            <div>
-              <img src={isOpenImg.image} alt="" />
-            </div>
-          </Modal>
-        )}
-      </div>
-    </React.Fragment>
+            </Modal>
+          )}
+          {canUseDOM && (
+            <Modal
+              centered
+              showCloseIcon
+              class="miniso-modal"
+              isOpen={isOpenImg.active}
+              onClose={handleCloseImage}
+            >
+              <div>
+                <img src={isOpenImg.image} alt="" />
+              </div>
+            </Modal>
+          )}
+        </div>
+      </React.Fragment>
+    )) ||
+    null
   )
 }
 

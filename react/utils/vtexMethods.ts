@@ -18,6 +18,7 @@ const defaultBestDeliveryStore: any = {
     'Mensajería - Entrega a Domicilio. La mayoría de nuestros pedidos llegan entre 24 y 72 hrs',
 }
 
+/*
 // producto para hacer la simulacion de carrito de google
 function getProductSimulationData(zipCode: string, sku?: string) {
   return {
@@ -76,6 +77,7 @@ async function getBestDeliveryStore(vtexSessionResponse: any) {
 
   return defaultBestDeliveryStore
 }
+*/
 
 // guardo los valores de la mejor tienda en la sesion del usuario
 async function saveDataStore(storeId: string) {
@@ -111,14 +113,15 @@ async function saveStoreInfo(storeId: string) {
 }
 
 // guardo la información en el la sesion de usuario
-export default async function saveUserStoreInfo(zipCode: string | null) {
+export default async function saveUserStoreInfo(/* zipCode: any */) {
   // guardo el cedis por defecto cuando no existe el codigo postal y lo limito a un codigo postal mayor 99999
-  if (!zipCode || zipCode === '5000' || +zipCode >= 99999) {
-    await saveDataStore(cedisStoreCode)
-    await saveStoreInfo(cedisStoreCode)
-    return defaultBestDeliveryStore
-  }
+  // if (!zipCode || zipCode === '5000' || +zipCode >= 99999) {
+  await saveDataStore(cedisStoreCode)
+  await saveStoreInfo(cedisStoreCode)
+  return defaultBestDeliveryStore
+  // }
 
+  /*
   // simulo el carrito agregando por defecto un sku con inventario infinito
   const simulation = await makeSimulationStore(zipCode)
 
@@ -139,4 +142,5 @@ export default async function saveUserStoreInfo(zipCode: string | null) {
   await saveStoreInfo(bestDeliveryStore.storeId)
 
   return bestDeliveryStore
+  */
 }
