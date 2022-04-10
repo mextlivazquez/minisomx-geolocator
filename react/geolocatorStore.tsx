@@ -133,7 +133,7 @@ const StoreSelector: StorefrontFunctionComponent<StoreSelectorProps> = ({
     if (storeName.includes('Express - ')) {
       // oculto modal expess
       hadleOpenImg({
-        active: true,
+        active: false,
         image: 'https://minisomx.vtexassets.com/arquivos/300x300_express.jpg',
       })
     }
