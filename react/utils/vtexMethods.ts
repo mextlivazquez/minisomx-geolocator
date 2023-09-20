@@ -1,7 +1,8 @@
-const vtexAppKey = 'vtexappkey-minisomx-JASTFM'
-const vtexAppToken =
-  'AOFISFLGBSZBLOYDQOMTDFRPOBEIJSTYYEXIKCKOBZPNBUKXHSNIACNUXQUQBDWIYBDGQPSOEXSEPDOTRGBQFKYWRDLUIUNYCHPARDHRAZECKIFTCAYVBFCNCGPNEYFJ'
-const cedisStoreCode = 'minisomxt0203'
+import {vtexAppKeyMX, vtexAppTokenMX} from '../keys'
+
+const vtexAppKey = vtexAppKeyMX
+const vtexAppToken = vtexAppTokenMX
+const cedisStoreCode = 'minisoqacuemanco'
 
 // headers por defecto para peticiones a la api de vtex
 const defaultHeaders: object = {
